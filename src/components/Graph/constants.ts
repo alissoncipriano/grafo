@@ -1,6 +1,5 @@
 import { IGrafo } from './types';
 
-// Dados de exemplo estáticos para o grafo.
 export const MOCK_GRAFO: IGrafo = {
   nos: [
     // Nó Central
@@ -73,8 +72,8 @@ export const MOCK_GRAFO: IGrafo = {
     { origem: '9', alvo: '29', descricao: 'Irmão', nivel: 3 },
   ],
   legenda: [
-    { tipoDocumento: 'C', cor: '#e63946', corClara: '#f1faee' }, // Vermelho forte para o central
-    { tipoDocumento: 'PF', cor: '#457b9d', corClara: '#a8dadc' }, // Azul para Pessoa Física
-    { tipoDocumento: 'PJ', cor: '#1d3557', corClara: '#a8dadc' }, // Azul escuro para Pessoa Jurídica
+    { tipoDocumento: 'C', cor: '#e63946', corClara: '#f1faee' },
+    { tipoDocumento: 'PF', cor: '#457b9d', corClara: '#a8dadc' },
+    { tipoDocumento: 'PJ', cor: '#1d3557', corClara: '#a8dadc' },
   ],
 };

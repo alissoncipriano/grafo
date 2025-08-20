@@ -50,7 +50,7 @@ const GraphActions = ({
   ) => {
     if (newType !== null) {
       onLabelTypeChange(newType);
-      setIsPanelOpen(false); // **CORREÇÃO**: Fecha o painel ao selecionar um rótulo
+      setIsPanelOpen(false);
     }
   };
 
@@ -60,7 +60,7 @@ const GraphActions = ({
   ) => {
     if (newLevel !== null) {
       onLevelChange(newLevel);
-      setIsPanelOpen(false); // **CORREÇÃO**: Fecha o painel ao selecionar um nível
+      setIsPanelOpen(false);
     }
   };
 

@@ -5,10 +5,5 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #FEF5DD;
-}
-
-.App h1 {
-  color: #511c0f;
-  margin-top: -5em;
+  background-color: #fef5dd;
 }

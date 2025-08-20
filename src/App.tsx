@@ -12,13 +12,13 @@ import { MOCK_GRAFO } from './components/Graph/constants';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2', // Um azul clássico
+      main: '#1976d2',
     },
     secondary: {
-      main: '#dc004e', // Um rosa/vermelho vibrante
+      main: '#dc004e',
     },
     background: {
-      default: '#f4f6f8', // Um cinza claro para o fundo
+      default: '#f4f6f8',
     },
   },
   typography: {
@@ -29,13 +29,10 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      {/* CssBaseline normaliza os estilos CSS, removendo inconsistências entre navegadores. */}
       <CssBaseline />
       <Container
         component='main'
         maxWidth='md'
-        // A prop `sx` é a nova forma de adicionar estilos customizados.
-        // Ela tem acesso direto ao tema (cores, espaçamento, etc.).
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -43,7 +40,7 @@ function App() {
           justifyContent: 'center',
           minHeight: '100vh',
           textAlign: 'center',
-          p: 3, // `p` é um atalho para `padding`, usando a unidade de espaçamento do tema.
+          p: 3,
         }}
       >
         <Box>

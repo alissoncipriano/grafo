@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { MotionValue } from 'framer-motion';
@@ -27,10 +28,10 @@ interface InteractionOptions {
  * @param containerRef Ref para o elemento div que irá conter o canvas.
  * @param grafo Dados do grafo a serem renderizados.
  * @param dimensions MotionValues para largura e altura, permitindo animações.
- * @param zoomControl Controlo para acionar o zoom a partir de botões externos.
- * @param centerControl Controlo para acionar a centralização a partir de um botão externo.
+ * @param zoomControl Controle para acionar o zoom a partir de botões externos.
+ * @param centerControl Controle para acionar a centralização a partir de um botão externo.
  * @param filters Opções de filtro para os nós e rótulos.
- * @param interactions Funções de callback para eventos de interação do utilizador.
+ * @param interactions Funções de callback para eventos de interação do usuário.
  */
 export const useGraph = (
   containerRef: React.RefObject<HTMLDivElement>,
@@ -57,10 +58,10 @@ export const useGraph = (
     nodes: NodeObject[];
     links: LinkObject[];
     colorMap: Map<string, string>;
-  }>(); // Armazena os dados atualmente visíveis
+  }>();
   const filtersRef = useRef(filters); // Armazena a referência mais recente dos filtros
   const lastHoveredNodeId = useRef<string | null>(null);
-  const isDraggingRef = useRef(false); // Flag para controlar se um nó está a ser arrastado
+  const isDraggingRef = useRef(false); // Flag para controlar se um nó está sendo arrastado
 
   // Estado para garantir que os SVGs sejam pré-carregados antes do primeiro desenho
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -68,7 +69,7 @@ export const useGraph = (
 
   /**
    * Efeito para manter a ref dos filtros sempre atualizada.
-   * Isto é crucial para que a função `draw`, definida uma única vez, possa aceder aos filtros mais recentes.
+   * Crucial para que a função draw, definida uma única vez, possa acessar os filtros mais recentes.
    */
   useEffect(() => {
     filtersRef.current = filters;
@@ -77,20 +78,25 @@ export const useGraph = (
 
   /**
    * Efeito para pré-carregar os SVGs dos nós como imagens.
-   * Isto melhora significativamente o desempenho, pois o browser não precisa de re-parsear o SVG a cada frame.
+   * Melhora significativamente o desempenho, pois o browser não precisa de re-parsear o SVG a cada frame.
    */
   useEffect(() => {
     if (!grafo) return;
+
     const imagePromises: Promise<void>[] = [];
     setImagesLoaded(false);
+
     grafo.legenda.forEach((legendaItem) => {
       const tipo = legendaItem.tipoDocumento as TipoDocumento;
+
       if (nodeSVGTemplates[tipo]) {
         const promise = new Promise<void>((resolve) => {
           const svgString = nodeSVGTemplates[tipo]
             .replace(/{COLOR}/g, legendaItem.cor)
             .replace(/{COLOR_CLARA}/g, legendaItem.corClara);
+
           const img = new Image();
+
           img.src = `data:image/svg+xml;base64,${btoa(
             unescape(encodeURIComponent(svgString))
           )}`;
@@ -105,9 +111,11 @@ export const useGraph = (
             resolve();
           };
         });
+
         imagePromises.push(promise);
       }
     });
+
     Promise.all(imagePromises).then(() => {
       setImagesLoaded(true);
     });
@@ -115,7 +123,7 @@ export const useGraph = (
 
   /**
    * Efeito para a funcionalidade de centralizar o grafo.
-   * Utiliza a função `calculateBounds` de utils.tsx para obter a "caixa" que envolve todos os nós visíveis
+   * Utiliza a função "calculateBounds" de utils.tsx para obter a "caixa" que envolve todos os nós visíveis
    * e depois ajusta o zoom/pan para a enquadrar no centro do canvas.
    */
   useEffect(() => {
@@ -143,6 +151,7 @@ export const useGraph = (
       filtersRef.current.labelType,
       context
     );
+
     if (!bounds) return;
 
     const { minX, maxX, minY, maxY } = bounds;
@@ -167,42 +176,43 @@ export const useGraph = (
   }, [centerControl.centerAction]);
 
   /**
-   * Efeito para acionar o zoom a partir dos botões de controlo.
+   * Efeito para acionar o zoom a partir dos botões de controle.
    */
   useEffect(() => {
     if (!zoomControl.zoomAction || !canvasRef.current || !zoomRef.current)
       return;
+
     const canvasSelection = d3.select(canvasRef.current);
     const zoomBehavior = zoomRef.current;
     const transition = canvasSelection.transition().duration(250);
-    if (zoomControl.zoomAction === 'in') {
-      zoomBehavior.scaleBy(transition, 1.3);
-    } else if (zoomControl.zoomAction === 'out') {
+
+    if (zoomControl.zoomAction === 'in') zoomBehavior.scaleBy(transition, 1.3);
+    else if (zoomControl.zoomAction === 'out')
       zoomBehavior.scaleBy(transition, 1 / 1.3);
-    }
+
     zoomControl.setZoomAction(null);
   }, [zoomControl.zoomAction]);
 
   /**
-   * Efeito de Setup: corre apenas uma vez na montagem do componente.
-   * É responsável por criar o canvas, a simulação D3 e configurar todos os listeners de eventos.
+   * Efeito de Setup: ocorre apenas uma vez na montagem do componente.
+   * Responsável por criar o canvas, a simulação de física do D3 e configurar todos os listeners de eventos.
    */
   useEffect(() => {
     if (!containerRef.current) return;
 
     const container = containerRef.current;
     const canvas = d3.select(container).append('canvas').node();
+
     if (!canvas) return;
+
     canvasRef.current = canvas;
     const context = canvas.getContext('2d');
+
     if (!context) return;
 
-    /**
-     * A função de desenho agora é um simples invólucro que chama a função `drawGraph` de utils.tsx,
-     * passando os dados e filtros necessários.
-     */
     const draw = () => {
       if (!context || !currentDataRef.current) return;
+
       drawGraph(
         context,
         transformRef.current,
@@ -212,7 +222,7 @@ export const useGraph = (
       );
     };
 
-    // Cria a simulação D3
+    // Cria a simulação de física dos nós
     const simulation = d3
       .forceSimulation<NodeObject, LinkObject>()
       .force(
@@ -221,6 +231,7 @@ export const useGraph = (
       )
       .force('charge', d3.forceManyBody())
       .on('tick', draw);
+
     simulationRef.current = simulation;
 
     // Configura o comportamento de zoom e pan
@@ -229,6 +240,7 @@ export const useGraph = (
       .scaleExtent([0.1, 8])
       .filter((event) => {
         if (event.type === 'wheel') return true;
+
         const { x, y, k } = transformRef.current;
         const pointerX = (event.offsetX - x) / k;
         const pointerY = (event.offsetY - y) / k;
@@ -237,6 +249,7 @@ export const useGraph = (
           pointerX,
           pointerY
         );
+
         return !event.button && noNodeFound;
       })
       .on('start', () => {
@@ -246,15 +259,17 @@ export const useGraph = (
         transformRef.current = event.transform;
         draw();
       });
+
     zoomRef.current = zoomBehavior;
     d3.select(canvas).call(zoomBehavior);
 
     /**
      * Função para atualizar o tamanho do canvas e o centro da simulação.
-     * Chamada na inicialização e sempre que as dimensões animadas mudam.
+     * Chamada na inicialização e sempre que as dimensões animadas do container mudam.
      */
     const updateCanvasAndSimulation = (w: number, h: number) => {
       if (!canvas || !context || !simulation) return;
+
       canvas.width = w;
       canvas.height = h;
       simulation.force('center', d3.forceCenter(w / 2, h / 2));
@@ -262,6 +277,7 @@ export const useGraph = (
     };
 
     updateCanvasAndSimulation(dimensions.width.get(), dimensions.height.get());
+
     const unsubscribeWidth = dimensions.width.onChange((w) =>
       updateCanvasAndSimulation(w, dimensions.height.get())
     );
@@ -269,9 +285,10 @@ export const useGraph = (
       updateCanvasAndSimulation(dimensions.width.get(), h)
     );
 
-    // Configura os listeners de eventos do rato no canvas
+    // Configura os listeners de eventos do mouse no canvas
     d3.select(canvas).on('click', (event) => {
       if (isDraggingRef.current) return;
+
       const { x, y, k } = transformRef.current;
       const pointerX = (event.offsetX - x) / k;
       const pointerY = (event.offsetY - y) / k;
@@ -280,15 +297,14 @@ export const useGraph = (
         pointerX,
         pointerY
       );
-      if (node) {
-        interactions.onNodeClick(node);
-      } else {
-        interactions.onCanvasClick();
-      }
+
+      if (node) interactions.onNodeClick(node);
+      else interactions.onCanvasClick();
     });
 
     d3.select(canvas).on('mousemove', (event) => {
       if (isDraggingRef.current) return;
+
       const { x, y, k } = transformRef.current;
       const pointerX = (event.offsetX - x) / k;
       const pointerY = (event.offsetY - y) / k;
@@ -297,10 +313,13 @@ export const useGraph = (
         pointerX,
         pointerY
       );
+
       if (node) {
         d3.select(event.currentTarget).style('cursor', 'pointer');
+
         if (lastHoveredNodeId.current !== node.id) {
           const screenPos = transformRef.current.apply([node.x!, node.y!]);
+
           interactions.onNodeHover(node, screenPos);
           lastHoveredNodeId.current = node.id;
         }
@@ -319,6 +338,7 @@ export const useGraph = (
           const { x, y, k } = transformRef.current;
           const pointerX = (event.x - x) / k;
           const pointerY = (event.y - y) / k;
+
           return (
             findNodeAt(
               currentDataRef.current?.nodes || [],
@@ -329,9 +349,12 @@ export const useGraph = (
         })
         .on('start', (event) => {
           if (!event.subject) return;
+
           isDraggingRef.current = true;
           interactions.onNodeHover(null, null);
+
           if (!event.active) simulation.alphaTarget(0.3).restart();
+
           event.subject.fx = event.subject.x;
           event.subject.fy = event.subject.y;
           d3.select(event.sourceEvent.target).style('cursor', 'grabbing');
@@ -339,21 +362,24 @@ export const useGraph = (
         })
         .on('drag', (event) => {
           if (!event.subject) return;
+
           const { k } = transformRef.current;
           event.subject.fx! += event.dx / k;
           event.subject.fy! += event.dy / k;
         })
         .on('end', (event) => {
           if (!event.subject) return;
+
           isDraggingRef.current = false;
+
           if (!event.active) simulation.alphaTarget(0);
+
           event.subject.fx = null;
           event.subject.fy = null;
           d3.select(event.sourceEvent.target).style('cursor', 'grab');
         }) as any
     );
 
-    // Função de limpeza para desmontar o componente
     return () => {
       unsubscribeWidth();
       unsubscribeHeight();
@@ -375,9 +401,7 @@ export const useGraph = (
       if (masterNodesRef.current.has(nodeData.id)) {
         const existingNode = masterNodesRef.current.get(nodeData.id)!;
         Object.assign(existingNode, nodeData);
-      } else {
-        masterNodesRef.current.set(nodeData.id, { ...nodeData });
-      }
+      } else masterNodesRef.current.set(nodeData.id, { ...nodeData });
     });
 
     const filteredLinks = grafo.relacionamentos.filter(
@@ -387,9 +411,8 @@ export const useGraph = (
       filteredLinks.flatMap((link) => [link.origem, link.alvo])
     );
     const centralNode = grafo.nos.find((n) => n.tipoDocumento === 'C');
-    if (centralNode) {
-      visibleNodeIds.add(centralNode.id);
-    }
+
+    if (centralNode) visibleNodeIds.add(centralNode.id);
 
     const visibleNodes = Array.from(visibleNodeIds)
       .map((id) => masterNodesRef.current.get(id))
@@ -419,9 +442,8 @@ export const useGraph = (
     }
 
     simulation.nodes(currentDataRef.current.nodes);
-    if (linkForce) {
-      linkForce.links(currentDataRef.current.links);
-    }
+
+    if (linkForce) linkForce.links(currentDataRef.current.links);
 
     simulation.alpha(1).restart();
   }, [grafo, filters.labelType, filters.visibleLevel, imagesLoaded]);

@@ -2,21 +2,24 @@ import * as d3 from 'd3';
 import { NodeObject, LinkObject, TipoDocumento } from './types';
 import { LabelType } from './GraphActions';
 
-// --- Funções de Desenho ---
-
+// --- Funções de Desenho
 /**
  * Desenha os relacionamentos (arestas/linhas) no canvas.
  */
 const drawLinks = (context: CanvasRenderingContext2D, links: LinkObject[]) => {
   context.strokeStyle = '#aaa';
   context.lineWidth = 1;
+
   context.beginPath();
+
   links.forEach((link) => {
     const source = link.source as NodeObject;
     const target = link.target as NodeObject;
+
     context.moveTo(source.x!, source.y!);
     context.lineTo(target.x!, target.y!);
   });
+
   context.stroke();
 };
 
@@ -28,6 +31,7 @@ const drawLinkLabels = (
   links: LinkObject[]
 ) => {
   const linkFontSize = 8;
+
   context.font = `italic ${linkFontSize}px sans-serif`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
@@ -35,6 +39,7 @@ const drawLinkLabels = (
   links.forEach((link) => {
     const source = link.source as NodeObject;
     const target = link.target as NodeObject;
+
     if (!source.x || !source.y || !target.x || !target.y) return;
 
     const midX = (source.x + target.x) / 2;
@@ -44,9 +49,8 @@ const drawLinkLabels = (
     context.save();
     context.translate(midX, midY);
     context.rotate(angle);
-    if (Math.abs(angle) > Math.PI / 2) {
-      context.rotate(Math.PI);
-    }
+
+    if (Math.abs(angle) > Math.PI / 2) context.rotate(Math.PI);
 
     const text = link.descricao;
     const textWidth = context.measureText(text).width;
@@ -59,6 +63,7 @@ const drawLinkLabels = (
     const cornerRadius = 3;
 
     context.fillStyle = 'rgba(0, 0, 0, 0.6)';
+
     context.beginPath();
     context.moveTo(rectX + cornerRadius, rectY);
     context.arcTo(
@@ -99,8 +104,10 @@ const drawNodes = (
   if (labelType === 'simples') {
     nodes.forEach((node) => {
       const img = svgImageCache.get(node.tipoDocumento);
+
       if (img) {
         const size = node.tipoDocumento === 'PF' ? 18 : 24;
+
         context.drawImage(
           img,
           node.x! - size / 2,
@@ -110,11 +117,14 @@ const drawNodes = (
         );
       }
     });
+
     const nodeFontSize = 9;
+
     context.font = `${nodeFontSize}px sans-serif`;
     context.fillStyle = '#333';
     context.textAlign = 'center';
     context.textBaseline = 'top';
+
     nodes.forEach((node) => {
       context.fillText(node.documento, node.x!, node.y! + 12);
     });
@@ -122,6 +132,7 @@ const drawNodes = (
     nodes.forEach((node) => {
       const padding = 8;
       const fontSize = 10;
+
       context.font = `bold ${fontSize}px sans-serif`;
       const textWidth = context.measureText(node.documento).width;
       const rectWidth = textWidth + padding * 2;
@@ -159,7 +170,7 @@ const drawNodes = (
 };
 
 /**
- * Função principal de desenho que orquestra a renderização de todos os elementos do grafo.
+ * Função principal de desenho que gerencia a renderização de todos os elementos do grafo.
  */
 export const drawGraph = (
   context: CanvasRenderingContext2D,
@@ -190,11 +201,10 @@ export const drawGraph = (
   context.restore();
 };
 
-// --- Funções de Lógica e Cálculo ---
+// --- Funções de lógica e cálculo
 
 /**
  * Encontra um nó numa determinada coordenada do "mundo" do grafo.
- * É uma função "read-only" que não afeta a simulação.
  */
 export const findNodeAt = (
   nodes: NodeObject[],
@@ -206,12 +216,13 @@ export const findNodeAt = (
 
   for (let i = nodes.length - 1; i >= 0; i--) {
     const node = nodes[i];
+
     if (!node.x || !node.y) continue;
+
     const dx = x - node.x;
     const dy = y - node.y;
-    if (dx * dx + dy * dy < rSq) {
-      return node;
-    }
+
+    if (dx * dx + dy * dy < rSq) return node;
   }
   return null;
 };
@@ -225,9 +236,7 @@ export const calculateBounds = (
   labelType: LabelType,
   context: CanvasRenderingContext2D
 ) => {
-  if (nodes.length === 0) {
-    return null;
-  }
+  if (nodes.length === 0) return null;
 
   let minX: number, maxX: number, minY: number, maxY: number;
 
@@ -239,6 +248,7 @@ export const calculateBounds = (
       const textWidth = context.measureText(node.documento).width;
       const rectWidth = textWidth + padding * 2;
       const rectHeight = fontSize + padding * 2;
+
       return {
         minX: node.x! - rectWidth / 2,
         maxX: node.x! + rectWidth / 2,
@@ -246,6 +256,7 @@ export const calculateBounds = (
         maxY: node.y! + rectHeight / 2,
       };
     });
+
     minX = d3.min(nodeBounds, (b) => b.minX)!;
     maxX = d3.max(nodeBounds, (b) => b.maxX)!;
     minY = d3.min(nodeBounds, (b) => b.minY)!;

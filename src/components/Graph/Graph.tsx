@@ -39,32 +39,21 @@ const Graph = ({ grafo }: GraphProps) => {
       documento: node.documento,
       tipoDocumento: node.tipoDocumento,
     });
-    // Ao clicar num nó, também mostramos a sua UI
-    if (hoveredNode?.data.id !== node.id) {
-      // A posição do rato não é necessária aqui, pois o hover já a terá definido
-      // Apenas para garantir, podemos chamar a função de hover
-      // Esta chamada será otimizada no useGraph para não disparar se já estiver visível
-    }
   };
 
   const handleNodeHover = (
     node: NodeObject | null,
     position: [number, number] | null
   ) => {
-    // Esta função agora apenas define o nó ativo, sem lógica de esconder
     if (node && position) {
       setHoveredNode({
         data: node,
         position: { x: position[0], y: position[1] },
       });
     }
-    // A lógica para esconder (passar null) foi removida daqui
   };
 
-  const handleCanvasClick = () => {
-    // Esconde a UI ao clicar em espaço vazio
-    setHoveredNode(null);
-  };
+  const handleCanvasClick = () => setHoveredNode(null);
 
   useGraph(
     graphContainerRef,
@@ -82,8 +71,11 @@ const Graph = ({ grafo }: GraphProps) => {
 
   const handleToggleExpand = () => {
     const nextValue = !isExpanded;
+
     setIsExpanded(nextValue);
+
     expansion.set(nextValue ? 1 : 0);
+
     setTimeout(() => {
       setCenterAction(true);
     }, 1000);
@@ -114,7 +106,7 @@ const Graph = ({ grafo }: GraphProps) => {
         overflow: 'hidden',
         backgroundColor: '#f9f9f9',
       }}
-      onMouseLeave={() => setHoveredNode(null)} // Esconde a UI ao sair do container
+      onMouseLeave={() => setHoveredNode(null)}
     >
       <GraphActions
         toggleExpand={handleToggleExpand}
@@ -136,7 +128,7 @@ const Graph = ({ grafo }: GraphProps) => {
             position: 'absolute',
             top: hoveredNode.position.y,
             left: hoveredNode.position.x,
-            transform: 'translate(-50%, 24px)', // Aumenta a distância para não sobrepor o cursor
+            transform: 'translate(-50%, 24px)',
             p: 0.5,
             borderRadius: '20px',
             display: 'flex',

@@ -27,6 +27,7 @@ const GraphLegend = ({ legenda }: GraphLegendProps) => {
       <Typography variant='subtitle2' gutterBottom>
         Legenda
       </Typography>
+
       <Stack spacing={1}>
         {legenda.map((item) => (
           <Stack
