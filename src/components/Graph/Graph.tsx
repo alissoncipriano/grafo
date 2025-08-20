@@ -153,11 +153,11 @@ const Graph = ({ grafo }: GraphProps) => {
               <AddCircleOutlineIcon fontSize='small' />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Partilhar'>
+          <Tooltip title='Compartilhar'>
             <IconButton
               size='small'
               onClick={() =>
-                console.log('Botão Partilhar Clicado:', hoveredNode.data)
+                console.log('Botão Compartilhar Clicado:', hoveredNode.data)
               }
             >
               <ShareIcon fontSize='small' />

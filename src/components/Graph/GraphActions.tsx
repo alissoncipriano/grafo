@@ -78,7 +78,7 @@ const GraphActions = ({
         }}
       >
         <Stack direction='column' spacing={0}>
-          <Tooltip title={isExpanded ? 'Restaurar' : 'Ecrã Cheio'}>
+          <Tooltip title={isExpanded ? 'Restaurar' : 'Tela Cheia'}>
             <IconButton
               onClick={toggleExpand}
               size='small'
@@ -136,7 +136,7 @@ const GraphActions = ({
                     variant='caption'
                     sx={{ mb: 0.5, textAlign: 'center' }}
                   >
-                    Rótulos
+                    Visualização
                   </Typography>
                   <ToggleButtonGroup
                     value={labelType}
