@@ -4,23 +4,23 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
 
-Um projeto desenvolvido para criar, visualizar e interagir com grafos de forma dinâmica e intuitiva no navegador. Utilizando a biblioteca D3.js, a aplicação simula um layout de força (force-directed graph), onde os nós se repelem e as arestas agem como molas, criando uma visualização orgânica e fluida.
+Um projeto desenvolvido para visualizar e interagir com um grafo de forma dinâmica e intuitiva no navegador. Utilizando a biblioteca D3.js, a aplicação simula um layout de força (force-directed graph), onde os nós se repelem e as arestas agem como molas, criando uma visualização orgânica e fluida.
 
 ---
 
-> **⚠️ Aviso de Compatibilidade**
+> **⚠️ Aviso de Compatibilidade:**
 > Para uma experiência completa e acesso a todas as funcionalidades interativas (como arrastar nós e utilizar o zoom), **recomenda-se o uso de um computador (desktop ou notebook)**. A visualização em dispositivos móveis é limitada.
 
 ## ✨ Funcionalidades Principais
 
-- **Visualização Dinâmica**: Renderiza grafos com nós e arestas em um canvas SVG.
-- **Layout de Força**: Os nós são posicionados automaticamente por um algoritmo de simulação de força (D3-force), evitando sobreposições e organizando a estrutura de forma clara.
-- **Interatividade Total**:
-  - **Adicionar e Remover Nós**: Adicione novos nós ao grafo ou remova nós existentes com um clique.
-  - **Arrastar Nós (Drag and Drop)**: Mova os nós pelo canvas para reorganizar a visualização.
+- **Visualização dinâmica**: Renderiza um grafo com nós e arestas em um canvas SVG.
+- **Layout de força**: Os nós são posicionados automaticamente por um algoritmo de simulação de força (D3-force), evitando sobreposições e organizando a estrutura de forma clara.
+- **Interatividade total**:
+  - **Visualização pos níveis**: Visualize os nós do grafo por níveis de relacionamentos específicos.
+  - **Arrastar nós (Drag and Drop)**: Mova os nós pelo canvas para reorganizar a visualização.
   - **Zoom e Pan**: Aumente ou diminua o zoom e navegue pelo grafo com facilidade.
-- **Tipos de Nós**: O sistema suporta diferentes categorias de nós, cada uma representada por um ícone SVG distinto, facilitando a identificação visual.
-- **Controles da Simulação**: Reinicie a simulação de força a qualquer momento para reorganizar os nós.
+- **Tipos de nós**: O sistema suporta diferentes categorias de nós, cada uma representada por um ícone SVG distinto, facilitando a identificação visual.
+- **Controles da simulação**: Reinicie a simulação de força a qualquer momento para reorganizar os nós.
 
 ---
 
@@ -34,9 +34,7 @@ Você pode testar a aplicação em tempo real no seguinte link:
 
 ## 📸 Demonstração Visual
 
-_(Recomendação: adicione aqui um screenshot ou um GIF do seu projeto em ação para impressionar os visitantes!)_
-
-![grafo-demonstration-gif](https://github.com/alissoncipriano/grafo/tree/main/public/demo.gif)
+<img src="/public/demo.gif">
 
 ---
 
